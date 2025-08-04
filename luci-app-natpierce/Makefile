@@ -1,14 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=皎月连内网穿透
-LUCI_DEPENDS:=+luci-base +luci-lib-nixio +luci-compat
+LUCI_DEPENDS:=+luci-base +luci-lib-nixio +luci-compat +kmod-tun
 LUCI_PKGARCH:=all
 PKG_NAME:=luci-app-natpierce
 PKG_VERSION:=2025.8.5
 PKG_RELEASE:=1
 PKG_DESCRIPTION:=皎月连一键内网穿透是一款纯P2P连接软件，能够组建虚拟局域网或是将本地局域网内的主机端口直接映射到远程主机。
-
-DEPENDS:=+kmod-tun
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
