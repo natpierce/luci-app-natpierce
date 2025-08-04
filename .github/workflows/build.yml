@@ -1,0 +1,67 @@
+name: Build luci-app-natpierce (all arch)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '请输入要发布的版本号 (例: v1.0.0)'
+        required: false
+        default: ''
+      text:
+        description: '请输入发布说明'
+        required: false
+        default: ''
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TAG: "${{ github.event.inputs.tag }}"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build all arch package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy package to OpenWrt build directory
+        run: |
+          mkdir -p package/luci-app-natpierce
+          cp -r ./ package/luci-app-natpierce/
+
+      - name: Building luci-app-natpierce
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: x86_64
+          PACKAGES: luci-app-natpierce
+          V: s
+      
+      - name: Create package zip file
+        run: |
+          cd bin/packages/x86_64/packages/
+          zip -j natpierce-all.zip luci-app-natpierce_*.ipk
+
+      - name: Upload packages as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: natpierce-all
+          path: bin/packages/x86_64/packages/natpierce-all.zip
+
+      - name: Create release
+        if: ${{ github.event.inputs.tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ env.TAG }}
+          body: |
+            此版本包含 luci-app-natpierce all 架构的 ipk 包。
+            ${{ github.event.inputs.text }}
+          files: bin/packages/x86_64/packages/natpierce-all.zip
