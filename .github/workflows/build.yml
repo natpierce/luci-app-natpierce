@@ -43,6 +43,7 @@ jobs:
           ARCH: x86_64
           PACKAGES: luci-app-natpierce
           V: s
+          OPENWRT_USE_APKG: 0
       
       - name: Create package zip file
         run: |
