@@ -24,4 +24,4 @@ define Package/luci-app-natpierce/install
 	$(INSTALL_BIN) ./root/usr/share/natpierce/upgrade.sh $(1)/usr/share/natpierce/
 endef
 
-$(eval$(call BuildPackage,luci-app-natpierce))
+$(eval $(call BuildPackage,luci-app-natpierce))
