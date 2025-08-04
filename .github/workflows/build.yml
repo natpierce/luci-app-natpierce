@@ -34,8 +34,8 @@ jobs:
 
       - name: Copy package to OpenWrt build directory
         run: |
-          mkdir -p package/luci-app-natpierce
-          cp -r ./ package/luci-app-natpierce/
+          mkdir -p package/
+          mv luci-app-natpierce package/
 
       - name: Building luci-app-natpierce
         uses: openwrt/gh-action-sdk@main
