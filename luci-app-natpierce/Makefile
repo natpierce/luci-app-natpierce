@@ -26,4 +26,10 @@ define Package/luci-app-natpierce/install
 
 endef
 
+define Package/luci-app-natpierce/prerm
+#!/bin/sh
+rm -rf /usr/share/natpierce
+endef
+
+
 $(eval $(call BuildPackage,luci-app-natpierce))
