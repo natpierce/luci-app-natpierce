@@ -45,16 +45,16 @@ jobs:
           V: s
           OPENWRT_USE_APKG: 0
       
-      - name: Create package zip file
+            - name: Create package zip file
         run: |
-          cd bin/packages/x86_64/packages/
+          cd bin/packages/x86_64/action/
           zip -j natpierce-all.zip luci-app-natpierce_*.ipk
 
       - name: Upload packages as artifact
         uses: actions/upload-artifact@v4
         with:
           name: natpierce-all
-          path: bin/packages/x86_64/packages/natpierce-all.zip
+          path: bin/packages/x86_64/action/natpierce-all.zip
 
       - name: Create release
         if: ${{ github.event.inputs.tag != '' }}
@@ -65,4 +65,4 @@ jobs:
           body: |
             此版本包含 luci-app-natpierce all 架构的 ipk 包。
             ${{ github.event.inputs.text }}
-          files: bin/packages/x86_64/packages/natpierce-all.zip
+          files: bin/packages/x86_64/action/natpierce-all.zip
