@@ -1,3 +1,4 @@
+```
 ├── README.md                           # 项目说明文档
 │
 └── luci-app-natpierce/                 # 插件核心目录
@@ -29,3 +30,4 @@
                     ├── natpierce       # 核心二进制程序
                     ├── update.sh       # 更新脚本
                     └── upgrade.sh      # 升级脚本
+```  
