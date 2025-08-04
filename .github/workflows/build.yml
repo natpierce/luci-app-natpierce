@@ -45,7 +45,7 @@ jobs:
           V: s
           OPENWRT_USE_APKG: 0
       
-            - name: Create package zip file
+      - name: Create package zip file
         run: |
           cd bin/packages/x86_64/action/
           zip -j natpierce-all.zip luci-app-natpierce_*.ipk
