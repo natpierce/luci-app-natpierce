@@ -1,0 +1,36 @@
+<style>
+    .delete-button {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+</style>
+
+<div class="cbi-section">
+    <div class="cbi-section-node">
+        <h3 class="cbi-section-title"><%:危险区域%></h3>
+        <p><%:点击此按钮将永久删除账户配置文件，此操作不可逆，请谨慎操作。%></p>
+        <br/>
+        <input type="button" class="cbi-button cbi-button-action delete-button" value="<%=translate("清除账户配置")%>" onclick="confirmClearConfig()" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    function confirmClearConfig() {
+        if (!confirm('<%:您确定要清除账户配置文件吗？此操作不可逆！%>')) {
+            return;
+        }
+
+        // 使用 XHR 发送 POST 请求到后端 API
+        XHR.post('<%=luci.dispatcher.build_url("admin", "services", "natpierce_clear_config")%>', null,
+            function(x, result) {
+                if (result && result.status === 'success') {
+                    alert('<%:成功: %> ' + result.message);
+                    window.location.reload(); // 清除后刷新页面
+                } else {
+                    alert('<%:错误: %> ' + (result ? result.message : x.statusText));
+                }
+            }
+        );
+    }
+</script>

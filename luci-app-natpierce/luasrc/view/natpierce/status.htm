@@ -1,0 +1,248 @@
+<style>
+/* 添加一些基本的CSS来美化显示 */
+.section-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.section-container legend {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.info-row {
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: center; /* 垂直居中对齐 */
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #f0f0f0; /* 添加虚线分隔 */
+}
+
+.info-row:last-of-type {
+    border-bottom: none; /* 最后一个不显示分隔线 */
+}
+
+.info-label {
+    flex: 0 0 100px; /* 固定标签宽度 */
+    font-weight: bold;
+    color: #555;
+    margin-right: 20px;
+}
+
+.info-value {
+    flex-grow: 1; /* 值字段占据剩余空间 */
+    color: #333;
+}
+
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 1px solid #91d5ff; /* 边框 */
+    border-radius: 4px;
+    font-weight: bold;
+    color: #1890ff; /* 蓝色字体 */
+}
+
+.status-message.error {
+    background-color: #fff0f6;
+    border-color: #ffadd2;
+    color: #eb2f96;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px; /* 按钮之间的间距 */
+    margin-top: 20px;
+}
+
+.cbi-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cbi-button-action {
+    background-color: #1890ff;
+    color: white;
+}
+
+.cbi-button-action:hover:enabled {
+    background-color: #40a9ff;
+    transform: translateY(-1px);
+}
+
+.cbi-button-action:disabled {
+    background-color: #bae7ff;
+    cursor: not-allowed;
+}
+
+.help-text {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #777;
+    line-height: 1.5;
+}
+</style>
+
+<script type="text/javascript">//<![CDATA[
+XHR.poll(5, '<%=url("admin/services/natpierce_status")%>', null,
+	function(x, d) {
+		var tb = document.getElementById('natpierce_status');
+		if (d && tb) {
+			if (d.running) {
+				var URL = "http://" + window.location.hostname + ":" + d.port + "";
+				tb.innerHTML = '<span style="color:green; font-weight:bold;"><%:正在运行%></span><br/><br/><b><%:请访问控制页面 %> </b><em><a href="' + URL + '" target="_blank">' + URL + ' </a></em>';
+			} else {
+				tb.innerHTML = '<span style="color:red; font-weight:bold;"><%:未启动%></span>';
+			}
+		}
+	}
+);
+
+function updateStatusMessage(message, isError) {
+    var msgDiv = document.getElementById('action_status_message');
+    if (msgDiv) {
+        // 如果消息为空或只有空白字符，则隐藏 div
+        if (!message || message.trim() === '') {
+            msgDiv.style.display = 'none';
+        } else {
+            // 否则，显示 div 并更新内容和样式
+            msgDiv.style.display = 'block';
+            msgDiv.textContent = message;
+            if (isError) {
+                msgDiv.classList.add('error');
+            } else {
+                msgDiv.classList.remove('error');
+            }
+        }
+    }
+}
+
+function displayLocalVersionInfo() {
+	var localVersionField = document.getElementById('local_version_field');
+	var latestVersionField = document.getElementById('latest_version_field');
+
+	localVersionField.textContent = '<%=translate("加载中...")%>';
+	latestVersionField.textContent = '<%=translate("加载中...")%>';
+	updateStatusMessage('<%:正在从本地读取版本信息...%>', false);
+
+	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "natpierce_get_version")%>', null,
+		function(x, result) {
+			if (result && result.status === 'success') {
+				localVersionField.textContent = result.current_installed_version || '<%=translate("未知")%>';
+				latestVersionField.textContent = result.latest_version_text || '<%=translate("N/A")%>';
+				updateStatusMessage('', false);
+			} else {
+				localVersionField.textContent = '<%=translate("N/A")%>';
+				latestVersionField.textContent = '<%=translate("N/A")%>';
+				updateStatusMessage(`<%:获取版本信息失败：%> ${result ? result.message : x.statusText}`, true);
+			}
+		}
+	);
+}
+
+function manualCheckAndUpdate() {
+	var checkUpdateButton = document.getElementById('check_version_button');
+	var performUpdateButton = document.getElementById('perform_update_button');
+	
+	updateStatusMessage('<%:正在远程检查最新版本并更新本地记录...%>', false);
+	
+	checkUpdateButton.disabled = true;
+	performUpdateButton.disabled = true;
+	checkUpdateButton.textContent = '<%=translate("检查中...")%>';
+
+	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "natpierce_update")%>', null,
+		function(x, result) {
+			if (result && result.status === 'success') {
+				updateStatusMessage(`<%:手动检查完成：%> ${result.message}`, false);
+				displayLocalVersionInfo();
+			} else {
+				updateStatusMessage(`<%:手动检查失败：%> ${result ? result.message : x.statusText}`, true);
+			}
+			checkUpdateButton.disabled = false;
+			performUpdateButton.disabled = false;
+			checkUpdateButton.textContent = '<%=translate("检查更新")%>';
+		}
+	);
+}
+
+function performActualUpdate() {
+    var checkUpdateButton = document.getElementById('check_version_button');
+    var performUpdateButton = document.getElementById('perform_update_button');
+    
+    updateStatusMessage('<%:正在执行更新操作，请稍候...%>', false);
+    
+    checkUpdateButton.disabled = true;
+    performUpdateButton.disabled = true;
+    performUpdateButton.textContent = '<%=translate("更新中...")%>';
+
+    XHR.get('<%=luci.dispatcher.build_url("admin", "services", "natpierce_upgrade")%>', null,
+        function(x, result) {
+            if (result && result.status === 'success') {
+                updateStatusMessage(`<%:更新完成：%> ${result.message}`, false);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                updateStatusMessage(`<%:更新失败：%> ${result ? result.message : x.statusText}`, true);
+                displayLocalVersionInfo();
+            }
+            checkUpdateButton.disabled = false;
+            performUpdateButton.disabled = false;
+            performUpdateButton.textContent = '<%=translate("执行更新")%>';
+            if (result.status !== 'success') {
+                XHR.get('<%=url("admin/services/natpierce_status")%>', null, function(x,d){ /* 手动触发服务状态刷新 */ });
+            }
+        }
+    );
+}
+
+window.addEventListener('load', function() {
+	displayLocalVersionInfo();
+	document.getElementById('check_version_button').onclick = manualCheckAndUpdate;
+	document.getElementById('perform_update_button').onclick = performActualUpdate;
+});
+//]]></script>
+
+<div class="section-container">
+	<legend><%:运行状态%></legend>
+	<div class="info-row">
+		<div class="info-label"><%:服务状态%></div>
+		<div class="info-value" id="natpierce_status">
+			<em><%:Collecting data...%></em>
+		</div>
+	</div>
+</div>
+
+<div class="section-container">
+	<legend><%:软件更新%></legend>
+	<div class="info-row">
+		<div class="info-label"><%:本地版本%></div>
+		<div class="info-value" id="local_version_field"><em><%:Collecting data...%></em></div>
+	</div>
+	<div class="info-row">
+		<div class="info-label"><%:最新版本%></div>
+		<div class="info-value" id="latest_version_field"><em><%:Collecting data...%></em></div>
+	</div>
+
+	<div class="button-group">
+		<button class="cbi-button cbi-button-action" id="check_version_button"><%=translate("检查更新")%></button>
+		<button class="cbi-button cbi-button-action" id="perform_update_button"><%=translate("执行更新")%></button>
+	</div>
+	
+	<div id="action_status_message" class="status-message"></div>
+
+	<p class="help-text"><%:点击“执行更新”将停止当前服务、下载最新版本并自动更新。%></p>
+</div>
