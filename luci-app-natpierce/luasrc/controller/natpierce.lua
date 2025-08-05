@@ -4,7 +4,7 @@ function index()
     if not nixio.fs.access("/etc/config/natpierce") then
         return
     end
-    entry({"admin", "services", "natpierce"}, cbi("natpierce"), _("皎月连"), 10).leaf=true
+    entry({"admin", "services", "natpierce"}, cbi("natpierce/natpierce"), _("皎月连"), 10).leaf=true
     entry({"admin", "services", "natpierce_status"}, call("natpierce_status"))
     entry({"admin", "services", "natpierce_get_version"}, call("natpierce_get_version"))
 

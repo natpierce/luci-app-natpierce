@@ -24,10 +24,29 @@ define Package/luci-app-natpierce/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/
 	$(CP) ./luasrc/* $(1)/usr/lib/lua/luci/
 
+	$(INSTALL_DIR) $(1)/www/
+	$(CP) ./htdocs/* $(1)/www/
+
+endef
+
+define Package/luci-app-natpierce/postinst
+#!/bin/sh
+# 初始化任务
+[ -n "${IPKG_INSTROOT}" ] || {
+	rm -f /tmp/luci-indexcache.*
+	rm -rf /tmp/luci-modulecache/
+
+	killall -HUP rpcd 2>/dev/null
+
+	/usr/share/natpierce/update.sh && /usr/share/natpierce/upgrade.sh
+
+	exit 0
+}
 endef
 
 define Package/luci-app-natpierce/prerm
 #!/bin/sh
+#清除残留
 rm -rf /usr/share/natpierce
 endef
 

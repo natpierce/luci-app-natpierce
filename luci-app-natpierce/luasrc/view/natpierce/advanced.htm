@@ -1,36 +1,101 @@
 <style>
-    .delete-button {
-        background-color: #dc3545;
-        border-color: #dc3545;
-        color: #fff;
-    }
+	.delete-button {
+		background-color: #dc3545;
+		border-color: #dc3545;
+		color: #fff;
+	}
+	.contributor-area {
+		margin-top: 20px;
+		padding: 20px;
+		border-radius: 8px;
+		background-color: #ffffff;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		border: none;
+	}
+	.contributor-list {
+		list-style-type: none;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+	}
+	.contributor-item {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		color: inherit;
+	}
+	.contributor-avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
+	.contributor-name {
+		font-weight: bold;
+	}
+	.build-link {
+		margin-top: 15px;
+		font-weight: bold;
+	}
 </style>
 
 <div class="cbi-section">
-    <div class="cbi-section-node">
-        <h3 class="cbi-section-title"><%:危险区域%></h3>
-        <p><%:点击此按钮将永久删除账户配置文件，此操作不可逆，请谨慎操作。%></p>
-        <br/>
-        <input type="button" class="cbi-button cbi-button-action delete-button" value="<%=translate("清除账户配置")%>" onclick="confirmClearConfig()" />
-    </div>
+	<div class="cbi-section-node">
+		<h3 class="cbi-section-title"><%:危险区域%></h3>
+		<p><%:点击此按钮将永久删除账户配置文件，此操作不可逆，请谨慎操作。%></p>
+		<br/>
+		<input type="button" class="cbi-button cbi-button-action delete-button" value="<%=translate("清除账户配置")%>" onclick="confirmClearConfig()" />
+	</div>
+</div>
+
+<div class="cbi-section">
+	<div class="cbi-section-node contributor-area">
+		<h3 class="cbi-section-title"><%:luci-app-natpierce项目开发者贡献%></h3>
+		<p><%:感谢以下开发者为本项目做出的贡献！%></p>
+		<%
+			local ok, contributors = pcall(require, "luci.model.cbi.natpierce.contributors")
+			if ok and contributors and #contributors > 0 then
+		%>
+		<ul class="contributor-list">
+		<%
+				for _, c in ipairs(contributors) do
+		%>
+			<li>
+				<a href="<%=c.url%>" target="_blank" class="contributor-item">
+					<img src="<%=resource%>luci-static/natpierce/avatars/<%=c.name%>.png" class="contributor-avatar" alt="<%=c.name%>头像" />
+					<span class="contributor-name"><%=c.name%></span>
+				</a>
+			</li>
+		<%
+				end
+			else
+		%>
+			<p><%:目前暂无贡献者，期待您的加入！%></p>
+		<%
+			end
+		%>
+		</ul>
+		<br/>
+		<p class="build-link"><%:项目仓库及构建链接: %><a href="https://github.com/Lyiyeyulongwu/luci-app-natpierce" target="_blank">点击此处查看构建状态或者提交贡献</a></p>
+	</div>
 </div>
 
 <script type="text/javascript">
-    function confirmClearConfig() {
-        if (!confirm('<%:您确定要清除账户配置文件吗？此操作不可逆！%>')) {
-            return;
-        }
+	function confirmClearConfig() {
+		if (!confirm('<%:您确定要清除账户配置文件吗？此操作不可逆！%>')) {
+			return;
+		}
 
-        // 使用 XHR 发送 POST 请求到后端 API
-        XHR.post('<%=luci.dispatcher.build_url("admin", "services", "natpierce_clear_config")%>', null,
-            function(x, result) {
-                if (result && result.status === 'success') {
-                    alert('<%:成功: %> ' + result.message);
-                    window.location.reload(); // 清除后刷新页面
-                } else {
-                    alert('<%:错误: %> ' + (result ? result.message : x.statusText));
-                }
-            }
-        );
-    }
+		XHR.post('<%=luci.dispatcher.build_url("admin", "services", "natpierce_clear_config")%>', null,
+			function(x, result) {
+				if (result && result.status === 'success') {
+					alert('<%:成功: %> ' + result.message);
+					window.location.reload();
+				} else {
+					alert('<%:错误: %> ' + (result ? result.message : x.statusText));
+				}
+			}
+		);
+	}
 </script>
