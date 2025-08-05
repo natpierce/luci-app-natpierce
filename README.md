@@ -1,33 +1,23 @@
-```
-├── README.md                           # 项目说明文档
-│
-└── luci-app-natpierce/                 # 插件核心目录
-    ├── Makefile                        # 插件的构建规则
-    │
-    └── luasrc/                         # Lua 源代码目录
-        ├── controller/                 # 后端控制器目录
-        │   └── natpierce.lua           # 路由和菜单定义
-        │
-        ├── model/                      # 配置模型目录
-        │   └── cbi/                    # CBI 模型目录
-        │       └── natpierce.lua       # UI 与配置的绑定
-        │
-        └── view/                       # 视图文件目录
-            └── natpierce/              # 插件视图目录
-                ├── status.htm          # 前端 HTML 页面
-                └── advanced.htm        # 高级选项HTML 页面
-    │
-    └── root/                           # 安装到系统根目录的文件
-        ├── etc/                        # 配置文件目录
-        │   └── config/                 # UCI 配置目录
-        │       └── natpierce           # UCI 配置文件模板
-        │   └── init.d/
-        │       └── natpierce           # 服务启动脚本
-        │
-        └── usr/                        # 用户程序和数据目录
-            └── share/                  # 共享文件目录
-                └── natpierce/          # 插件私有目录
-                    ├── natpierce       # 核心二进制程序
-                    ├── update.sh       # 更新脚本
-                    └── upgrade.sh      # 升级脚本
-```  
+# luci-app-natpierce  
+[gituhub仓库地址](https://github.com/Lyiyeyulongwu/natpierce-extend "https://github.com/Lyiyeyulongwu/luci-app-natpierce")
+
+这是基于[natpierce-extend](https://github.com/Lyiyeyulongwu/natpierce-extend)的逻辑进行重构的natpierce luci应用
+
+## 亮点
+> 默认ipk不再包括二进制文件减小包体积,包含二进制文件的包体积在4MB左右 重构的包体积在 10KB左右  
+> 标记了强依赖,安装时将强要求安装<code>**luci-base luci-lib-nixio luci-compat kmod-tun**</code>  
+> 安装的初始化过程会下载最新的natpierce包,不需要手动初始化  
+> 集成**更新**和**升级**选项,可以在用户的意愿下更新natpierce程序  
+> 提供luci页面清除natpierce程序配置文件功能,使用post提供安全性 防止 CSRF (跨站请求伪造) 攻击  
+> 服务状态更新跟踪方式,只跟踪自身的natpierce程序,不会获取到其他同名进程(如在docker运行的natpierce)  
+> 提供的包架构限制为all,对于natpierce程序是否支持本机架构请参考皎月连官网提供的对应架构natpierce二进制程序  
+
+## 预览图片  
+![菜单](/assets/img/demo1.png)  
+
+## 贡献  
+欢迎任何人提交你的贡献  
+[可能有用的信息](https://github.com/Lyiyeyulongwu/natpierce-extend/structure.md)  
+为了纪念你的贡献,本项目提供了一个贡献卡片  
+<code>卡片将在每次打包时自动生成本仓库的贡献信息</code>  
+![贡献卡片](/assets/img/demo2.png)  
