@@ -85,14 +85,14 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # 停止服务
-/etc/init.d/natpierce stop
+# /etc/init.d/natpierce stop
 
 # 解压并替换二进制文件
 tar -xzvf natpierce.tar.gz
 if [ ! -f "natpierce" ]; then
     echo "错误: 解压失败，未找到 natpierce 二进制文件。"
     rm -rf "$WORK_DIR"
-    /etc/init.d/natpierce start # 重新启动旧服务
+    # /etc/init.d/natpierce start # 重新启动旧服务
     exit 1
 fi
 
@@ -109,6 +109,6 @@ echo "更新成功！新版本：$latest_version"
 rm -rf "$WORK_DIR"
 
 # 重新启动服务
-/etc/init.d/natpierce start
+# /etc/init.d/natpierce start
 
 exit 0
