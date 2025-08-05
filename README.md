@@ -17,7 +17,7 @@
 
 ## 贡献  
 欢迎任何人提交你的贡献  
-[可能有用的信息](https://github.com/Lyiyeyulongwu/natpierce-extend/structure.md)  
+[可能有用的信息](https://github.com/Lyiyeyulongwu/luci-app-natpierce/blob/main/structure.md)  
 为了纪念你的贡献,本项目提供了一个贡献卡片  
 <code>卡片将在每次打包时自动生成本仓库的贡献信息</code>  
 ![贡献卡片](/assets/img/demo2.png)  
