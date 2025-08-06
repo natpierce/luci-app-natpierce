@@ -70,7 +70,8 @@ case "$arch" in
         else
             URL=$URL_mips
         fi
-    fi  
+    fi
+    ;;
   *)
     echo "不支持的架构: $arch"
     exit 1
