@@ -60,12 +60,17 @@ case "$arch" in
     echo "不支持的架构: $arch"
     exit 1
     ;;        
-  mips)
-    URL=$URL_mips
-    ;;
-  mipsel)
-    URL=$URL_mipsel
-    ;;    
+  mips | mipsel)
+    if [ "$arch" = "mipsel" ]; then
+        URL=$URL_mipsel
+    else
+        first_byte=$(printf '\1' | hexdump -e '1/1 "%02x"')
+        if [ "$first_byte" = "01" ]; then
+            URL=$URL_mipsel
+        else
+            URL=$URL_mips
+        fi
+    fi  
   *)
     echo "不支持的架构: $arch"
     exit 1
