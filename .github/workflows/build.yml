@@ -64,6 +64,12 @@ jobs:
           name: natpierce-all
           path: bin/packages/x86_64/action/natpierce-all.zip
 
+      - name: Rename zip with tag and create release
+        if: ${{ github.event.inputs.tag != '' }}
+        run: |
+          cd bin/packages/x86_64/action/
+          mv natpierce-all.zip natpierce-${{ env.TAG }}-all.zip    
+
       - name: Create release
         if: ${{ github.event.inputs.tag != '' }}
         uses: softprops/action-gh-release@v2
@@ -73,4 +79,4 @@ jobs:
           body: |
             此版本包含 luci-app-natpierce all 架构的 ipk 包。
             ${{ github.event.inputs.text }}
-          files: bin/packages/x86_64/action/natpierce-all.zip
+          files: bin/packages/x86_64/action/natpierce-${{ env.TAG }}-all.zip
