@@ -48,10 +48,9 @@ jobs:
       - name: Building luci-app-natpierce
         uses: openwrt/gh-action-sdk@main
         env:
-          ARCH: x86_64-openwrt-22.03
+          ARCH: x86_64-22.03.2
           PACKAGES: luci-app-natpierce
           V: s
-          OPENWRT_USE_APKG: 0
       
       - name: Create package zip file
         run: |
