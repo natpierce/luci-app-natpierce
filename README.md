@@ -1,7 +1,7 @@
 # luci-app-natpierce  
-[gituhub仓库地址](https://github.com/Lyiyeyulongwu/natpierce-extend "https://github.com/Lyiyeyulongwu/luci-app-natpierce")
+[gituhub仓库地址](https://github.com/XingHeYuZhuan/natpierce-extend "https://github.com/XingHeYuZhuan/luci-app-natpierce")
 
-这是基于[natpierce-extend](https://github.com/Lyiyeyulongwu/natpierce-extend)的逻辑进行重构的natpierce luci应用
+这是基于[natpierce-extend](https://github.com/XingHeYuZhuan/natpierce-extend)的逻辑进行重构的natpierce luci应用
 
 ## 亮点
 > 默认ipk不再包括二进制文件减小包体积,包含二进制文件的包体积在4MB左右 重构的包体积在 10KB左右  
@@ -17,7 +17,7 @@
 
 ## 贡献  
 欢迎任何人提交你的贡献  
-[可能有用的信息](https://github.com/Lyiyeyulongwu/luci-app-natpierce/blob/main/structure.md)  
+[可能有用的信息](https://github.com/XingHeYuZhuan/luci-app-natpierce/blob/main/structure.md)  
 为了纪念你的贡献,本项目提供了一个贡献卡片  
 <code>卡片将在每次打包时自动生成本仓库的贡献信息</code>  
 ![贡献卡片](/assets/img/demo2.png) 
