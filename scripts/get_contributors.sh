@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # 定义 GitHub 仓库信息和文件路径
-REPO="Lyiyeyulongwu/luci-app-natpierce"
+REPO="XingHeYuZhuan/luci-app-natpierce"
 API_URL="https://api.github.com/repos/${REPO}/contributors"
 
 # 定义文件输出路径，这些路径是相对于仓库根目录的
