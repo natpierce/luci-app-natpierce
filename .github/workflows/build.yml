@@ -33,7 +33,7 @@ jobs:
           - x86_64
         sdk:
           - 22.03.2
-          - 24.10.2
+          - SNAPSHOT
 
     steps:
       - uses: actions/checkout@v4
