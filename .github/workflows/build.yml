@@ -74,6 +74,11 @@ jobs:
         with:
           path: artifacts
 
+      - name: Move packages to a flat directory
+        run: |
+          mkdir -p release
+          find artifacts -type f \( -name "*.ipk" -o -name "*.apk" \) -exec mv {} release/ \;
+
       - name: Create release and upload files
         uses: softprops/action-gh-release@v2
         with:
@@ -82,4 +87,4 @@ jobs:
           body: |
             此版本包含 luci-app-natpierce 所有架构的 ipk 和 apk 包。
             ${{ github.event.inputs.text }}
-          files: artifacts/**/*.ipk artifacts/**/*.apk
+          files: release/*
