@@ -1,5 +1,4 @@
 <style>
-/* 添加一些基本的CSS来美化显示 */
 .section-container {
     background-color: #ffffff;
     border-radius: 8px;
@@ -18,37 +17,37 @@
 }
 
 .info-row {
-    display: flex; /* 使用 Flexbox 布局 */
-    align-items: center; /* 垂直居中对齐 */
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
     padding: 8px 0;
-    border-bottom: 1px dashed #f0f0f0; /* 添加虚线分隔 */
+    border-bottom: 1px dashed #f0f0f0;
 }
 
 .info-row:last-of-type {
-    border-bottom: none; /* 最后一个不显示分隔线 */
+    border-bottom: none;
 }
 
 .info-label {
-    flex: 0 0 100px; /* 固定标签宽度 */
+    flex: 0 0 100px;
     font-weight: bold;
     color: #555;
     margin-right: 20px;
 }
 
 .info-value {
-    flex-grow: 1; /* 值字段占据剩余空间 */
+    flex-grow: 1;
     color: #333;
 }
 
 .status-message {
     margin-top: 15px;
     padding: 10px;
-    background-color: #e6f7ff; /* 浅蓝色背景 */
-    border: 1px solid #91d5ff; /* 边框 */
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
     border-radius: 4px;
     font-weight: bold;
-    color: #1890ff; /* 蓝色字体 */
+    color: #1890ff;
 }
 
 .status-message.error {
@@ -59,33 +58,28 @@
 
 .button-group {
     display: flex;
-    gap: 15px; /* 按钮之间的间距 */
+    gap: 15px;
     margin-top: 20px;
 }
 
-.cbi-button {
-    padding: 10px 20px;
+.blue-button {
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.cbi-button-action {
-    background-color: #1890ff;
     color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #1890ff;
 }
 
-.cbi-button-action:hover:enabled {
+.blue-button:hover {
     background-color: #40a9ff;
-    transform: translateY(-1px);
 }
 
-.cbi-button-action:disabled {
-    background-color: #bae7ff;
-    cursor: not-allowed;
+.blue-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.5);
 }
 
 .help-text {
@@ -238,8 +232,8 @@ window.addEventListener('load', function() {
 	</div>
 
 	<div class="button-group">
-		<button class="cbi-button cbi-button-action" id="check_version_button"><%=translate("检查更新")%></button>
-		<button class="cbi-button cbi-button-action" id="perform_update_button"><%=translate("执行更新")%></button>
+		<button class="blue-button" id="check_version_button"><%=translate("检查更新")%></button>
+		<button class="blue-button" id="perform_update_button"><%=translate("执行更新")%></button>
 	</div>
 	
 	<div id="action_status_message" class="status-message"></div>

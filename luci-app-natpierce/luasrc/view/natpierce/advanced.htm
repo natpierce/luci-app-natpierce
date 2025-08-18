@@ -1,8 +1,20 @@
 <style>
 	.delete-button {
-		background-color: #dc3545;
-		border-color: #dc3545;
-		color: #fff;
+    	background-color: #dc3545; /* 红色背景 */
+    	border: none;
+    	color: white;
+    	padding: 10px 20px;
+    	font-size: 16px;
+    	border-radius: 4px;
+    	cursor: pointer;
+    	transition: background-color 0.3s;
+	}
+	.delete-button:hover {
+    	background-color: #c82333; /* 悬停时加深颜色 */
+	}
+	.delete-button:focus {
+    	outline: none;
+    	box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.5); /* 聚焦时的阴影效果 */
 	}
 	.contributor-area {
 		margin-top: 20px;
@@ -41,11 +53,11 @@
 </style>
 
 <div class="cbi-section">
-	<div class="cbi-section-node">
+	<div class="cbi-section-node contributor-area">
 		<h3 class="cbi-section-title"><%:危险区域%></h3>
 		<p><%:点击此按钮将永久删除账户配置文件，此操作不可逆，请谨慎操作。%></p>
 		<br/>
-		<input type="button" class="cbi-button cbi-button-action delete-button" value="<%=translate("清除账户配置")%>" onclick="confirmClearConfig()" />
+		<input type="button" class="delete-button" value="<%=translate("清除账户配置")%>" onclick="confirmClearConfig()" />
 	</div>
 </div>
 
