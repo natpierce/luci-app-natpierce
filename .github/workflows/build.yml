@@ -61,7 +61,6 @@ jobs:
           name: luci-app-natpierce-all-${{ matrix.sdk }}
           path: bin/packages/${{ matrix.arch }}/action/
           if-no-files-found: warn
-
       - name: Release
         if: ${{ github.event.inputs.tag != '' }}
         uses: softprops/action-gh-release@v2
