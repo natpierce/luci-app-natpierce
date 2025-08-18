@@ -24,14 +24,19 @@ permissions:
 
 jobs:
   build:
-    name: Build all arch package
+    name: Build all arch package sdk:${{ matrix.sdk }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x86_64
+        sdk:
+          - 22.03.2
+          - SNAPSHOT
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq    
 
       - name: Generate contributor list and avatars
         run: |
@@ -46,34 +51,35 @@ jobs:
       - name: Building luci-app-natpierce
         uses: openwrt/gh-action-sdk@main
         env:
-          ARCH: x86_64-22.03.2
+          ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           PACKAGES: luci-app-natpierce
           V: s
       
-      - name: Create package zip file
-        run: |
-          cd bin/packages/x86_64/action/
-          zip -j natpierce-all.zip luci-app-natpierce_*.ipk
-
       - name: Upload packages as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: natpierce-all
-          path: bin/packages/x86_64/action/natpierce-all.zip
+          name: luci-app-natpierce-all-${{ matrix.sdk }}
+          path: bin/packages/${{ matrix.arch }}/action/
+          if-no-files-found: warn
 
-      - name: Rename zip with tag and create release
-        if: ${{ github.event.inputs.tag != '' }}
-        run: |
-          cd bin/packages/x86_64/action/
-          mv natpierce-all.zip natpierce-${{ env.TAG }}-all.zip    
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.tag != '' }}
 
-      - name: Create release
-        if: ${{ github.event.inputs.tag != '' }}
+    steps:
+      - name: Download all packages
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create release and upload files
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.TAG }}
+          tag_name: ${{ github.event.inputs.tag }}
           body: |
-            此版本包含 luci-app-natpierce all 架构的 ipk 包。
+            此版本包含 luci-app-natpierce 所有架构的 ipk 和 apk 包。
             ${{ github.event.inputs.text }}
-          files: bin/packages/x86_64/action/natpierce-${{ env.TAG }}-all.zip
+          files: artifacts/**/*.ipk artifacts/**/*.apk
