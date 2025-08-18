@@ -62,29 +62,13 @@ jobs:
           path: bin/packages/${{ matrix.arch }}/action/
           if-no-files-found: warn
 
-  create_release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs: build
-    if: ${{ github.event.inputs.tag != '' }}
-
-    steps:
-      - name: Download all packages
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Move packages to a flat directory
-        run: |
-          mkdir -p release
-          find artifacts -type f \( -name "*.ipk" -o -name "*.apk" \) -exec mv {} release/ \;
-
-      - name: Create release and upload files
+      - name: Release
+        if: ${{ github.event.inputs.tag != '' }}
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.event.inputs.tag }}
           body: |
-              此版本包含 luci-app-natpierce 所有架构的 ipk 和 apk 包。
-              ${{ github.event.inputs.text }}
-          files: release/*
+            此版本包含 luci-app-natpierce 所有架构的 ipk 和 apk 包。
+            ${{ github.event.inputs.text }}
+          files: bin/packages/${{ matrix.arch }}/action/*      
