@@ -5,9 +5,9 @@ XHR.poll(5, '<%=url("admin/services/natpierce_status")%>', null,
         if (d && tb) {
             if (d.running) {
                 var URL = "http://" + window.location.hostname + ":" + d.port + "";
-                tb.innerHTML = '<div style="padding-top: 0.25rem;"><span style="color:green; font-weight:bold;"><%:正在运行%></span><br/><br/><b><%:请访问控制页面 %> </b><em><a href="' + URL + '" target="_blank">' + URL + ' </a></em></div>';
+                tb.innerHTML = '<span style="color:green; font-weight:bold;"><%:正在运行%></span><br/><br/><b><%:请访问控制页面 %> </b><em><a href="' + URL + '" target="_blank">' + URL + ' </a></em>';
             } else {
-                tb.innerHTML = '<div style="padding-top: 0.25rem;"><a style="color:red;font-weight:bolder"><%:未启动%></a></div>';
+                tb.innerHTML = '<a style="color:red;font-weight:bolder"><%:未启动%></a>';
             }
         }
     }
@@ -122,7 +122,7 @@ window.addEventListener('load', function() {
         <div class="cbi-value">
             <label class="cbi-value-title"><%:服务状态%></label>
             <div  class="cbi-value-field" id="natpierce_status">
-                <div style="padding-top: 0.25rem;"><em><%:Collecting data...%></em></div>
+                <em><%:Collecting data...%></em>
             </div>
         </div>
     </div>
@@ -133,11 +133,11 @@ window.addEventListener('load', function() {
         <h3 class="cbi-section-title"><%:软件更新%></h3>
         <div class="cbi-value">
             <label class="cbi-value-title"><%:本地版本%></label>
-            <div style="padding-top: 0.25rem;" class="cbi-value-field" id="local_version_field"><em><%:Collecting data...%></em></div>
+            <div class="cbi-value-field" id="local_version_field"><em><%:Collecting data...%></em></div>
         </div>
         <div class="cbi-value">
             <label class="cbi-value-title"><%:最新版本%></label>
-            <div style="padding-top: 0.25rem;" class="cbi-value-field" id="latest_version_field"><em><%:Collecting data...%></em></div>
+            <div class="cbi-value-field" id="latest_version_field"><em><%:Collecting data...%></em></div>
         </div>
         
         <br />
