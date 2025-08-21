@@ -132,23 +132,19 @@ window.addEventListener('load', function() {
     <div class="cbi-section-node">
         <h3 class="cbi-section-title"><%:软件更新%></h3>
         <div class="cbi-value">
-            <label class="cbi-value-title"><%:本地版本%></label>
-            <div class="cbi-value-field" id="local_version_field"><em><%:Collecting data...%></em></div>
-        </div>
-        <div class="cbi-value">
             <label class="cbi-value-title"><%:最新版本%></label>
             <div class="cbi-value-field" id="latest_version_field"><em><%:Collecting data...%></em></div>
-        </div>
-        
-        <br />
-        <div class="cbi-value">
-            <label class="cbi-value-title"></label>
             <div class="cbi-value-field">
-                <input type="button" class="cbi-button cbi-button-action" id="check_version_button" value="<%=translate("检查更新")%>" style="font-weight: bold;"/>
-                <input type="button" class="cbi-button cbi-button-action" id="perform_update_button" value="<%=translate("执行更新")%>" style="font-weight: bold;"/>
+                <input type="button" class="cbi-button cbi-button-action" id="check_version_button" value="<%=translate("检查更新")%>" style="font-weight: bold;margin-left: 20px;"/>
             </div>
         </div>
-        
+        <div class="cbi-value">
+            <label class="cbi-value-title"><%:本地版本%></label>
+            <div class="cbi-value-field" id="local_version_field"><em><%:Collecting data...%></em></div>
+            <div class="cbi-value-field">
+                <input type="button" class="cbi-button cbi-button-action" id="perform_update_button" value="<%=translate("执行更新")%>" style="font-weight: bold;margin-left: 20px;"/>
+            </div>
+        </div>
         <div id="action_status_message" class="cbi-button-apply" style="display:none; margin-top: 10px;"></div>
         
         <p class="cbi-value-description"><%:点击“执行更新”将停止当前服务、下载最新版本并自动更新。%></p>
