@@ -1,0 +1,51 @@
+name: 构建测试用luci-app-natpierce
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build all arch package sdk:${{ matrix.sdk }}  
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x86_64
+        sdk:
+          - 22.03.2
+          - SNAPSHOT
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate contributor list and avatars
+        run: |
+          chmod +x ./scripts/get_contributors.sh
+          ./scripts/get_contributors.sh
+
+      - name: Copy package to OpenWrt build directory
+        run: |
+          mkdir -p package/
+          mv luci-app-natpierce package/
+
+      - name: Building luci-app-natpierce
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
+          PACKAGES: luci-app-natpierce
+          V: s
+      
+      - name: Upload packages as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-natpierce-all-${{ matrix.sdk }}
+          path: bin/packages/${{ matrix.arch }}/action/
+          if-no-files-found: warn
