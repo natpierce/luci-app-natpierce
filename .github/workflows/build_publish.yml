@@ -1,4 +1,4 @@
-name: Build luci-app-natpierce (all arch)
+name: 构建并发布luci-app-natpierce
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
         description: '请输入发布说明'
         required: false
         default: ''
-
+  
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -25,6 +25,7 @@ permissions:
 jobs:
   build:
     name: Build all arch package sdk:${{ matrix.sdk }}
+    if: contains('XingHeYuZhuan', github.actor)    
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -54,6 +55,7 @@ jobs:
           ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
           PACKAGES: luci-app-natpierce
           V: s
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
       
       - name: Upload packages as artifact
         uses: actions/upload-artifact@v4
