@@ -83,7 +83,7 @@ mkdir -p "$WORK_DIR"
 cd "$WORK_DIR"
 
 # 下载压缩包
-wget -q --no-check-certificate -O natpierce.tar.gz "$URL"
+wget -q -O natpierce.tar.gz "$URL"
 if [ "$?" -ne 0 ]; then
     echo "错误: 下载失败，请检查网络连接。"
     rm -rf "$WORK_DIR"
