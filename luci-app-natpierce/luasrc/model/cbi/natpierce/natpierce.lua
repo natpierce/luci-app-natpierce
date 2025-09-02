@@ -8,9 +8,6 @@ m.description = translate("皎月连一键内网穿透是一款纯P2P连接软�
 	.. translate("https://www.natpierce.cn")
 	.. [[</a>]]
 
-s = m:section(SimpleSection)
-s.template = "natpierce/status"
-
 s = m:section(TypedSection, "natpierce", "")
 s.title = translate("配置")
 s.addremove = false
@@ -22,6 +19,9 @@ o.default = 0
 o = s:option(Value, "port", translate("Web访问端口"))
 o.datatype = "uinteger"
 o.default = 33272
+
+s = m:section(SimpleSection)
+s.template = "natpierce/status"
 
 s = m:section(SimpleSection)
 s.template = "natpierce/advanced"
