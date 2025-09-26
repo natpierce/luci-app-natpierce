@@ -19,10 +19,27 @@ function natpierce_status()
     local uci = require 'luci.model.uci'.cursor()
     local port = tonumber(uci:get_first("natpierce", "natpierce", "port"))
     local e = { }
-    local stdout = luci.sys.exec("/etc/init.d/natpierce status")
-    e.running = (string.find(stdout, "running", 1, true) ~= nil)
-
+    
+    local service_stdout = luci.sys.exec("/etc/init.d/natpierce status")
+    local service_running = (string.find(service_stdout, "running", 1, true) ~= nil)
+    
     e.port = (port or 33272)
+    e.process_alive = service_running
+    
+    local port_is_listening_by_natpierce = false
+    local netstat_cmd = string.format("netstat -lntp | grep ':%d '", e.port)
+    local netstat_output = luci.sys.exec(netstat_cmd)
+    
+    if netstat_output and string.len(netstat_output) > 0 then
+        if string.find(netstat_output, "natpierce", 1, true) then
+            port_is_listening_by_natpierce = true
+        end
+    end
+
+    e.running = service_running and port_is_listening_by_natpierce
+    
+    e.listening = port_is_listening_by_natpierce 
+    
     luci.http.prepare_content("application/json")
     luci.http.write_json(e)
 end

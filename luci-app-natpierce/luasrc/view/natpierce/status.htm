@@ -6,7 +6,12 @@ XHR.poll(5, '<%=url("admin/services/natpierce_status")%>', null,
             if (d.running) {
                 var URL = "http://" + window.location.hostname + ":" + d.port + "";
                 tb.innerHTML = '<span style="color:green; font-weight:bold;"><%:正在运行%></span><br/><br/><b><%:请访问控制页面 %> </b><em><a href="' + URL + '" target="_blank">' + URL + ' </a></em>';
-            } else {
+            } 
+            else if (d.process_alive === true) { 
+                tb.innerHTML = '<span style="color:orange;font-weight:bolder"><%:运行异常%></span><br/>' + 
+                               '<span><%:服务进程已启动，但端口未被监听或端口被占用，请检查配置或系统日志，或者防火墙阻隔。%></span>';
+            }
+            else {
                 tb.innerHTML = '<a style="color:red;font-weight:bolder"><%:未启动%></a>';
             }
         }
